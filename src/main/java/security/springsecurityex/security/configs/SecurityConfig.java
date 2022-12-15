@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,6 +23,7 @@ import security.springsecurityex.security.provider.CustomAuthenticationProvider;
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
+    private final AuthenticationDetailsSource authenticationDetailsSource;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -79,9 +81,14 @@ public class SecurityConfig {
                 .requestMatchers("/config").hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()
-
-                .and()
-                .formLogin();
+            .and()
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/login_proc")
+                .authenticationDetailsSource(authenticationDetailsSource) // ID, PW 이외의 값을 인증과정 중에 사용하고 싶을 때, 사용한다.
+                .defaultSuccessUrl("/")
+                .permitAll()
+        ;
 
         return http.build();
     }
