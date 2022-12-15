@@ -4,7 +4,7 @@
 <!--<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>-->
 <!--<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>-->
 
-<head th:replace="layout/header::userHead"></head>
+<head th:replace="~{layout/header::userHead}"></head>
 <script>
     function formLogin(e) {
 
@@ -38,7 +38,7 @@
     }
 </script>
 <body>
-<div th:replace="layout/top::header"></div>
+<div th:replace="~{layout/top::header}"></div>
 <div class="container text-center">
     <div class="login-form d-flex justify-content-center">
         <div class="col-sm-5" style="margin-top: 30px;">

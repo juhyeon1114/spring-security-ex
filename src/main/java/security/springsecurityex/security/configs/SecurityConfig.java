@@ -12,21 +12,41 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import security.springsecurityex.security.service.CustomUserDetailsService;
 
 @Configuration
 public class SecurityConfig {
 
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
+    /**
+     * 메모리 방식의 사용자 등록
+     */
+//    @Bean
+//    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
+//        String password = passwordEncoder().encode("1234");
+//
+//        AuthenticationManagerBuilder auth = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
+//        auth.inMemoryAuthentication().withUser("user").password(password).roles("USER");
+//        auth.inMemoryAuthentication().withUser("manager").password(password).roles("MANAGER");
+//        auth.inMemoryAuthentication().withUser("admin").password(password).roles("ADMIN");
+//
+//        return auth.build();
+//    }
+
+    /**
+     * Custom한 userDetailService를 사용하도록 함
+     */
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
-        String password = passwordEncoder().encode("1234");
 
         AuthenticationManagerBuilder auth = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
-        auth.inMemoryAuthentication().withUser("user").password(password).roles("USER");
-        auth.inMemoryAuthentication().withUser("manager").password(password).roles("MANAGER");
-        auth.inMemoryAuthentication().withUser("admin").password(password).roles("ADMIN");
+        auth.userDetailsService(userDetailsService);
 
         return auth.build();
     }
